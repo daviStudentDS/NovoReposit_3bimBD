@@ -477,6 +477,9 @@ $$
 call spInsertProduto(12345678910130, 'Camiseta de Poliéster', 35.61, 100);
 call spInsertProduto(12345678910131, 'Blusa Frio Moletom', 200.00, 100);
 call spInsertProduto(12345678910132, 'Vestido Decote Redondo', 144.00, 50);
+call spInsertProduto (12345678910111, 'Rei de Papel Mache', 54.61, 120);
+call spInsertProduto (12345678910112, 'Bolinha de Sabão', 100.45, 120);
+call spInsertProduto (12345678910113, 'Carro Bate Bate', 44.00, 120);
 
 select * from tbproduto;
 
@@ -485,7 +488,7 @@ select * from tbproduto;
  DELIMITER $$
 create procedure spDeleteProduto(vCodigoBarras bigint)
 BEGIN
-	if exists (select CodBarras from tbproduto where CodBarras = vCodigoBarras) then
+	if exists (select CodBarras from tbproduto where CodBarras = vCodigoBarras) then                                                                                                                                                                                                                         
 		delete from tbproduto where CodBarras = vCodigoBarras;
 		else 
 			select "O produto não existe";
@@ -502,4 +505,57 @@ select * from tbproduto;
 
 # EXERCÍCIO 14
 
-# EXERCÍCIO 15
+DELIMITER $$
+
+create procedure spUpdateProduto(vCodigoBarras bigint, vNome varchar(50), vValorUnit decimal(6,2))
+BEGIN
+
+if exists (select CodBarras from tbProduto where CodBarras = VCodigoBarras) then
+update tbproduto                              
+set Nome= vNome, ValorUnitario = vValorUnit where CodBarras = vCodigoBarras;
+else
+	select "Inexistente";
+end if;
+
+
+END $$
+
+call spUpdateProduto(12345678910111, 'Rei de Papel Mache', 64.50);
+call spUpdateProduto(12345678910112, 'Bolinha de Sabão', 120.00);
+call spUpdateProduto(12345678910113, 'Carro Bate Bate', 64.00);
+
+select * from tbproduto;
+
+# EXERCÍCIO 15 	CRIANDO UMA PROCEDURE PRA EXIBIR OS REGISTROS DA TABELA -  Rosa
+
+ DELIMITER $$
+
+create procedure spExibirProdutos()
+BEGIN
+
+select * from tbproduto;
+
+end $$
+
+call spExibirProdutos;
+
+ /*CREATE PROCEDURE Selecionar_Produtos(IN quantidade INT)
+BEGIN
+SELECT * FROM PRODUTOS
+LIMIT quantidade;
+END $$
+DELIMITER ;
+
+*/
+
+-- drop procedure spExibirProdutos;
+
+
+create table tbprodutoHistorico LIKE tbproduto;
+
+select * from tbProdutoHistorico;
+
+alter table tbprodutoHistorico  add Ocorrencia varchar(20);
+alter table tbprodutoHistorico add Atualizacao datetime;
+
+describe tbProdutoHistorico;
